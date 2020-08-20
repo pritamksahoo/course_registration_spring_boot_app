@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <head>
+        <title>Available Courses</title>
+
+        <style>
+
+            th, td, tr {
+                border: 1px solid black;
+            }
+    
+            table {
+                border-collapse: collapse;
+            }
+        </style>
+
+    </head>
+    
+    <body>
+        <div th:if="${current_user != 'anonymousUser'}">
+            <h3>Welcome, <span th:text="${current_user}"></span></h3>
+            
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out"/>
+            </form>
+
+            <hr>
+        </div>
+
+        <div>
+            <a th:href="@{/home}">Home</a>&nbsp; | &nbsp;
+            <a th:href="@{/available_courses}">Available Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/registered_courses}">Registered Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/yourcourses}">Your Courses</a>
+            <button th:if="${current_user == 'anonymousUser'}" role="button" style="float: right;">
+                <a th:href="@{/login}">LogIn</a>
+            </button>
+        </div>
+        <hr>
+
+        <div>
+            <h4>All available Courses</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Coordinator</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c: ${all_course}">
+                        <form th:action="@{/register}" method="post">
+                            <td><input type="number" name="cid" th:value="${c.getId()}" style="width: 6em;" readonly /></td>
+                            <td th:text="${c.getName()}"></td>
+
+                            <td th:if="${c.getCoordinator().getUsername() == current_user}">You</td>
+                            <td th:if="${c.getCoordinator().getUsername() != current_user}" th:text="${c.getCoordinator().getName()}"></td>
+
+                            <td th:if="${current_user != 'anonymousUser' && c.getCoordinator().getUsername() == current_user}">NIL</td>
+                            <td th:if="${current_user != 'anonymousUser' && c.getCoordinator().getUsername() != current_user}"><input type="submit" value="Register"/></td>
+                            <td th:if="${current_user == 'anonymousUser'}"><a th:href="@{/authRegistration}">LogIn to Register</a></td>
+                        </form>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <head>
+        <title>Registered Courses</title>
+
+        <style>
+
+            th, td, tr {
+                border: 1px solid black;
+            }
+    
+            table {
+                border-collapse: collapse;
+            }
+        </style>
+
+    </head>
+    
+    <body>
+        <h3>Welcome, [[${#httpServletRequest.remoteUser}]]</span></h3>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Log Out"/>
+        </form>
+        <hr>
+
+        <div>
+            <a th:href="@{/home}">Home</a>&nbsp; | &nbsp;
+            <a th:href="@{/available_courses}">Available Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/registered_courses}">Registered Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/yourcourses}">Your Courses</a>
+            <button th:if="${current_user == 'anonymousUser'}" role="button" style="float: right;">
+                <a th:href="@{/login}">LogIn</a>
+            </button>
+        </div>
+        <hr>
+
+        <div>
+            <h4>Your registered Courses</h4>
+
+            <span th:if="${registerstatus}">
+                <span th:if="${registerstatus == 200}" th:text="${message}" style="color: green;"></span>
+                <span th:if="${registerstatus != 200}" th:text="${message}" style="color: red;"></span>
+            </span>
+            <br>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Coordinator</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c: ${registered_courses}">
+                        <form th:action="@{/unregister}" method="post">
+                            <td><input type="number" name="cid" th:value="${c.getId()}" style="width: 6em;" readonly /></td>
+                            <td th:text="${c.getName()}"></td>
+                            <td th:text="${c.getCoordinator().getName()}"></td>
+                            <td><input type="submit" value="Un-Register" /></td>
+                        </form>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

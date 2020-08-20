@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <div th:if="${current_user != 'anonymousUser'}">
+            <h3>Welcome, <span th:text="${current_user}"></span></h3>
+            
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out"/>
+            </form>
+
+            <hr>
+        </div>
+
+        <div>
+            <a th:href="@{/home}">Home</a>&nbsp; | &nbsp;
+            <a th:href="@{/available_courses}">Available Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/registered_courses}">Registered Courses</a>&nbsp; | &nbsp;
+            <a th:href="@{/yourcourses}">Your Courses</a>
+            <button th:if="${current_user == 'anonymousUser'}" role="button" style="float: right;">
+                <a th:href="@{/login}">LogIn</a>
+            </button>
+        </div>
+        <hr>
+
+        <div>
+            <h4>Welcome to Productivo!</h4>
+        </div>
+    </body>
+</html>
