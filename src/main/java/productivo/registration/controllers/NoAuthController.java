@@ -32,8 +32,22 @@ public class NoAuthController {
     @Autowired
     private UserService userv;
 
-    @GetMapping("/userEntry")
-    public String entry() {
+    @GetMapping("/createRoles")
+    public String roles() {
+
+        Role r = new Role();
+        r.setName("STUDENT");
+        rserv.saveRole(r);
+
+        r = new Role();
+        r.setName("TEACHER");
+        rserv.saveRole(r);
+
+        return "Hello, world";
+    }
+
+    @GetMapping("/teacherEntry")
+    public String teacherEntry() {
         User user = new User();
         user.setName("Ashok Kumar Sahoo");
         user.setEmail("asahoo777@gmail.com");
@@ -44,6 +58,25 @@ public class NoAuthController {
         List<Role> roles = new ArrayList<>();
         
         Role r = rserv.findRoleByRoleName("TEACHER");
+        roles.add(r);
+
+        user.setRoles(roles);
+        userv.saveUser(user);
+        return "Hello, world";
+    }
+
+    @GetMapping("/studentEntry")
+    public String studentEntry() {
+        User user = new User();
+        user.setName("Pritam Kumar Sahoo");
+        user.setEmail("pritam.ndp@gmail.com");
+        user.setUsername("pks");
+        user.setPassword("pks");
+        // user.setConfirmPassword("amrik");
+
+        List<Role> roles = new ArrayList<>();
+        
+        Role r = rserv.findRoleByRoleName("STUDENT");
         roles.add(r);
 
         user.setRoles(roles);
